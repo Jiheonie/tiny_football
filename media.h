@@ -3,7 +3,7 @@
 #ifndef MEDIA_H
 #define MEDIA_H
 
-extern SDL_Texture *helloWorld;
+extern SDL_Texture *background;
 
 // Loads media
 bool loadMedia(SDL_Renderer *renderer, SDL_Surface *screenSurface);

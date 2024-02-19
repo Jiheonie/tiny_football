@@ -5,7 +5,7 @@
 #include "init.h"
 // #include "texture.h"
 
-SDL_Texture *helloWorld = NULL;
+SDL_Texture *background = NULL;
 
 SDL_Window *window = NULL;
 
@@ -33,12 +33,18 @@ int main(int argc, char *argv[])
   }
 
   SDL_Texture *surface1 = loadTexture("assets/zomb.png", renderer, screenSurface);
+  SDL_Texture *surface2 = loadTexture("assets/zomb.png", renderer, screenSurface);
 
   // Apply the image
   SDL_Rect zombRect;
   zombRect.x = zombRect.y = 100;
   zombRect.w = 140;
   zombRect.h = 140;
+
+  SDL_Rect zombRect2;
+  zombRect2.x = zombRect2.y = 120;
+  zombRect2.w = 128;
+  zombRect2.h = 128;
 
   // SDL_RenderPresent(renderer);
 
@@ -79,9 +85,10 @@ int main(int argc, char *argv[])
     SDL_RenderClear(renderer);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderCopy(renderer, helloWorld, NULL, NULL);
+    // SDL_RenderCopy(renderer, background, NULL, NULL);
     SDL_RenderDrawLine(renderer, 5, 5, 400, 400);
     SDL_RenderCopy(renderer, surface1, NULL, &zombRect);
+    SDL_RenderCopy(renderer, surface2, NULL, &zombRect2);
 
     // Update screen
     SDL_RenderPresent(renderer);

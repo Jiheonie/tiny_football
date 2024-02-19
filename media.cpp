@@ -11,8 +11,8 @@ bool loadMedia(SDL_Renderer *renderer, SDL_Surface *screenSurface)
 
   // Loadsplash image
   // helloWorld = loadTexture("assets/hello_world.bmp", renderer, screenSurface);
-  helloWorld = loadTexture("assets/helloWorld.png", renderer, screenSurface);
-  if (helloWorld == NULL)
+  background = loadTexture("assets/helloWorld.png", renderer, screenSurface);
+  if (background == NULL)
   {
     std::cout << "Unable to load image "
               << "std/map.png"
@@ -26,8 +26,8 @@ bool loadMedia(SDL_Renderer *renderer, SDL_Surface *screenSurface)
 void destroyMedia()
 {
   // Deallocate texture
-  SDL_DestroyTexture(helloWorld);
-  helloWorld = NULL;
+  SDL_DestroyTexture(background);
+  background = NULL;
 }
 
 SDL_Surface *loadSurface(std::string path, SDL_Surface *screenSurface)
