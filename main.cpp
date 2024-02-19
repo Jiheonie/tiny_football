@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include "media.h"
 #include "init.h"
+#include "Ball.h"
 // #include "texture.h"
 
 SDL_Texture *background = NULL;
@@ -45,6 +46,8 @@ int main(int argc, char *argv[])
   zombRect2.x = zombRect2.y = 120;
   zombRect2.w = 128;
   zombRect2.h = 128;
+
+  Ball soccerBall{};
 
   // SDL_RenderPresent(renderer);
 
@@ -89,6 +92,8 @@ int main(int argc, char *argv[])
     SDL_RenderDrawLine(renderer, 5, 5, 400, 400);
     SDL_RenderCopy(renderer, surface1, NULL, &zombRect);
     SDL_RenderCopy(renderer, surface2, NULL, &zombRect2);
+
+    soccerBall.draw(renderer);
 
     // Update screen
     SDL_RenderPresent(renderer);
