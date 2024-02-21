@@ -6,6 +6,7 @@
 #include "media.h"
 #include "init.h"
 #include "Ball.h"
+#include "Player.h"
 #include "Vector2D.h"
 // #include "texture.h"
 
@@ -39,6 +40,8 @@ int main(int argc, char *argv[])
   {
     std::cout << "Failed to initialize SDL_image for PNG file: " << SDL_GetError() << std::endl;
   }
+
+  std::vector<Player> players {};
 
   SDL_Texture *surface1 = loadTexture("assets/playerHead.png", renderer, screenSurface);
   SDL_Texture *surface2 = loadTexture("assets/playerHead.png", renderer, screenSurface);
