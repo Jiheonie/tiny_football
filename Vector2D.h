@@ -10,7 +10,9 @@ private:
   float y;
 
 public:
-  Vector()
+  Vector2D(float newX, float newY);
+  Vector2D operator+(Vector2D const& other);
+  Vector2D operator-(Vector2D const& other);
 };
 
 #endif

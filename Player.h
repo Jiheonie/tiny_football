@@ -7,6 +7,7 @@
 class Player
 {
 private:
+  SDL_Surface *image =  
   float cenX;
   float cenY;
   float rad;

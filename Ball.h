@@ -10,13 +10,15 @@ const double PI = 3.14159265358979323846;
 class Ball
 {
 private:
+  SDL_Texture *image;
   float cenX;
   float cenY;
-  float outRad;
+  float rad;
   float inRad;
+  float degree;
 
 public:
-  Ball();
+  Ball(SDL_Renderer *renderer, SDL_Surface *screenSurface);
   void draw(SDL_Renderer *renderer);
   void move();
 };
