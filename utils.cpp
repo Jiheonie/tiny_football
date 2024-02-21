@@ -1,12 +1,27 @@
 #include <iostream>
-#include <string>
-#include <sstream>
+#include <cmath>
 #include "utils.h"
 
-template <typename T>
-std::string itos(T i)
+void drawCircle(SDL_Renderer *renderer, float centerX, float centerY, float radius)
 {
-  std::stringstream s;
-  s << i;
-  return s.str();
+  for (float x = -radius; x <= radius; ++x)
+  {
+    float y = sqrt(radius * radius - x * x);
+    SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+    SDL_RenderDrawPoint(renderer, centerX + x, centerY - y);
+  }
+}
+
+void SDL_RenderFillCircle(SDL_Renderer *renderer, float centerX, float centerY, float radius)
+{
+  for (float y = -radius; y <= radius; ++y)
+  {
+    for (float x = -radius; x <= radius; ++x)
+    {
+      if (x * x + y * y <= radius * radius)
+      {
+        SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+      }
+    }
+  }
 }

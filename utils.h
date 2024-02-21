@@ -1,8 +1,10 @@
 #include <string>
+#include<SDL2/SDL.h>
 #ifndef UTIlS_H
 #define UTIlS_H
 
-template <typename T>
-std::string itos(T i);
+void drawCircle(SDL_Renderer *renderer, float centerX, float centerY, float radius);
+
+void SDL_RenderFillCircle(SDL_Renderer *renderer, float centerX, float centerY, float radius);
 
 #endif
