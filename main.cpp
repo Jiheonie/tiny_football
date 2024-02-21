@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderCopy(renderer, background, NULL, NULL);
-    SDL_RenderDrawLine(renderer, 5, 5, 400, 400);
+    // SDL_RenderDrawLine(renderer, 5, 5, 400, 400);
     SDL_RenderCopy(renderer, surface1, NULL, &zombRect);
     SDL_RenderCopy(renderer, surface2, NULL, &zombRect2);
 
