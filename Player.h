@@ -3,8 +3,9 @@
 #define PLAYER_H
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <vector>
 
-enum Team
+enum TeamEnum
 {
   Blue,
   Red
@@ -18,10 +19,27 @@ private:
   float cenX;
   float cenY;
   float rad;
+  bool turnLeft;
 
 public:
-  Player(Team team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
-  void move();
+  Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
+  void draw(SDL_Renderer *renderer);
+  void move(char m);
+  void shoot();
+};
+
+class Team
+{
+private:
+  std::vector<Player *> players;
+  TeamEnum color;
+  int selectedNumber;
+
+public:
+  Team(TeamEnum c);
+  Player *selectPlayer();
+  void addPlayer(Player *p);
+  void switchPlayer();
   void draw(SDL_Renderer *renderer);
 };
 

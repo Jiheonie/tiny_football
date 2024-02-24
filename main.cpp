@@ -8,7 +8,6 @@
 #include "Ball.h"
 #include "Player.h"
 #include "Vector2D.h"
-// #include "texture.h"
 
 SDL_Texture *background = NULL;
 
@@ -41,25 +40,17 @@ int main(int argc, char *argv[])
     std::cout << "Failed to initialize SDL_image for PNG file: " << SDL_GetError() << std::endl;
   }
 
-  std::vector<Player> players {};
+  Team *blueTeam = new Team(Blue);
+  blueTeam->addPlayer(new Player(Blue, 100, 300, renderer, screenSurface));
+  blueTeam->addPlayer(new Player(Blue, 200, 300, renderer, screenSurface));
+  Player *blueSelectedPlayer = blueTeam->selectPlayer();
 
-  SDL_Texture *surface1 = loadTexture("assets/playerHead.png", renderer, screenSurface);
-  SDL_Texture *surface2 = loadTexture("assets/playerHead.png", renderer, screenSurface);
+  Team *redTeam = new Team(Red);
+  redTeam->addPlayer(new Player(Red, 500, 300, renderer, screenSurface));
+  redTeam->addPlayer(new Player(Red, 400, 300, renderer, screenSurface));
+  Player *redSelectedPlayer = redTeam->selectPlayer();
 
-  // Apply the image
-  SDL_Rect playerRect;
-  playerRect.x = 100;
-  playerRect.y = 100;
-  playerRect.w = playerRect.h = 100;
-
-  SDL_Rect playerRect2;
-  playerRect2.x = 500;
-  playerRect2.y = 100;
-  playerRect2.w = playerRect2.h = 100;
-
-  Ball soccerBall{renderer, screenSurface};
-
-  // SDL_RenderPresent(renderer);
+  Ball *soccerBall = new Ball(renderer, screenSurface);
 
   // Main Loop Flag
   bool quit = false;
@@ -76,20 +67,36 @@ int main(int argc, char *argv[])
       {
         quit = true;
       }
-      if (SDL_KEYDOWN == event.type)
+
+      if (event.type == SDL_KEYDOWN)
       {
-        switch (event.key.keysym.sym)
+        const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
+        if (currentKeyStates[SDL_SCANCODE_A])
         {
-        case SDLK_a:
-          std::cout << "a is down - move left" << std::endl;
-          break;
+          blueSelectedPlayer->move('l');
         }
-      }
-      else if (SDL_KEYUP == event.type)
-      {
-        if (SDLK_a == event.key.keysym.sym)
+        if (currentKeyStates[SDL_SCANCODE_D])
         {
-          std::cout << "a is up - stop moving left" << std::endl;
+          blueSelectedPlayer->move('r');
+        }
+        if (currentKeyStates[SDL_SCANCODE_S])
+        {
+          blueTeam->switchPlayer();
+          blueSelectedPlayer = blueTeam->selectPlayer();
+        }
+
+        if (currentKeyStates[SDL_SCANCODE_J])
+        {
+          redSelectedPlayer->move('l');
+        }
+        if (currentKeyStates[SDL_SCANCODE_L])
+        {
+          redSelectedPlayer->move('r');
+        }
+        if (currentKeyStates[SDL_SCANCODE_K])
+        {
+          redTeam->switchPlayer();
+          redSelectedPlayer = redTeam->selectPlayer();
         }
       }
     }
@@ -99,11 +106,11 @@ int main(int argc, char *argv[])
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderCopy(renderer, background, NULL, NULL);
-    // SDL_RenderDrawLine(renderer, 5, 5, 400, 400);
-    SDL_RenderCopyEx(renderer, surface1, NULL, &playerRect, 0, NULL, SDL_FLIP_NONE);
-    SDL_RenderCopyEx(renderer, surface2, NULL, &playerRect2, 0, NULL, SDL_FLIP_HORIZONTAL);
 
-    soccerBall.draw(renderer);
+    blueTeam->draw(renderer);
+    redTeam->draw(renderer);
+
+    soccerBall->draw(renderer);
 
     // Update screen
     SDL_RenderPresent(renderer);
