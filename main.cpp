@@ -18,7 +18,7 @@ SDL_Surface *screenSurface = NULL;
 SDL_Renderer *renderer = NULL;
 
 std::vector<Vector2D> externalForces{
-    Vector2D(0, 1),
+    Vector2D(0, 10),
 };
 
 int main(int argc, char *argv[])
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   {
     while (SDL_PollEvent(&event))
     {
-      if (SDL_QUIT == event.type)
+      if (event.type == SDL_QUIT)
       {
         quit = true;
       }
@@ -79,11 +79,6 @@ int main(int argc, char *argv[])
         {
           blueSelectedPlayer->move('r');
         }
-        if (currentKeyStates[SDL_SCANCODE_S])
-        {
-          blueTeam->switchPlayer();
-          blueSelectedPlayer = blueTeam->selectPlayer();
-        }
 
         if (currentKeyStates[SDL_SCANCODE_J])
         {
@@ -93,11 +88,33 @@ int main(int argc, char *argv[])
         {
           redSelectedPlayer->move('r');
         }
-        if (currentKeyStates[SDL_SCANCODE_K])
+
+        if (event.key.repeat == 0)
         {
-          redTeam->switchPlayer();
-          redSelectedPlayer = redTeam->selectPlayer();
+          if (currentKeyStates[SDL_SCANCODE_S])
+          {
+            blueTeam->switchPlayer();
+            blueSelectedPlayer = blueTeam->selectPlayer();
+          }
+          if (currentKeyStates[SDL_SCANCODE_W])
+          {
+            blueSelectedPlayer->move('j');
+          }
+
+          if (currentKeyStates[SDL_SCANCODE_K])
+          {
+            redTeam->switchPlayer();
+            redSelectedPlayer = redTeam->selectPlayer();
+          }
+          if (currentKeyStates[SDL_SCANCODE_I])
+          {
+            redSelectedPlayer->move('j');
+          }
         }
+      }
+
+      if (event.type == SDL_KEYUP)
+      {
       }
     }
 

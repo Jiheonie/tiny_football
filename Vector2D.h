@@ -1,5 +1,6 @@
 #include <iostream>
 
+#pragma once
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
@@ -10,9 +11,14 @@ private:
   float y;
 
 public:
+  Vector2D();
   Vector2D(float newX, float newY);
-  Vector2D operator+(Vector2D const& other);
-  Vector2D operator-(Vector2D const& other);
+  float getX();
+  float getY();
+  Vector2D operator+(Vector2D const &other);
+  Vector2D operator-(Vector2D const &other);
+  Vector2D operator*(float const &mass);
+  Vector2D operator/(float const &mass);
 };
 
 #endif

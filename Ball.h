@@ -1,18 +1,17 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <vector>
+#include "PhysicsObject.h"
 
 #ifndef BALL_H
 #define BALL_H
 
 const double PI = 3.14159265358979323846;
 
-class Ball
+class Ball : public PhysicsObject
 {
 private:
   SDL_Texture *image;
-  float cenX;
-  float cenY;
   float rad;
   float inRad;
   float degree;
