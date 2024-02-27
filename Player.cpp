@@ -9,7 +9,8 @@ Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface
   image = loadTexture(path, renderer, screenSurface);
   rad = 50;
   turnLeft = (t == Blue) ? false : true;
-  moveVector = {};
+  isMoving = false;
+  isJumping = false;
 };
 
 void Player::draw(SDL_Renderer *renderer)
@@ -28,20 +29,34 @@ void Player::move(char m)
   switch (m)
   {
   case 'l':
-    position = position + Vector2D(-10, 0);
-    moveVector.push_back(new Vector2D(-10, 0));
-    turnLeft = true;
+    if (!isMoving)
+    {
+      forces.push_back(Vector2D(-10, 0));
+      turnLeft = true;
+      isMoving = true;
+    }
     break;
   case 'r':
-    position = position + Vector2D(10, 0);
-    moveVector.push_back(new Vector2D(10, 0));
-    turnLeft = false;
+    if (!isMoving)
+    {
+      forces.push_back(Vector2D(10, 0));
+      turnLeft = false;
+      isMoving = true;
+    }
     break;
   case 'j':
-    moveVector.push_back(new Vector2D(0, 20));
+    if (!isJumping)
+    {
+      forces.push_back(Vector2D(0, 20));
+      isJumping = true;
+    }
     break;
   case 's':
-    moveVector = {};
+    if (isMoving)
+    {
+      // stop
+      isMoving = false;
+    }
     break;
 
   default:

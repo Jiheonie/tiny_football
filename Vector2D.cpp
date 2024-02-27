@@ -3,11 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-Vector2D::Vector2D(float newX, float newY)
-{
-  x = newX;
-  y = newY;
-}
+Vector2D::Vector2D() : x(0), y(0) {}
+
+Vector2D::Vector2D(float newX, float newY) : x(newX), y(newY) {}
 
 float Vector2D::getX()
 {

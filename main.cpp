@@ -17,10 +17,6 @@ SDL_Surface *screenSurface = NULL;
 
 SDL_Renderer *renderer = NULL;
 
-std::vector<Vector2D> externalForces{
-    Vector2D(0, 10),
-};
-
 int main(int argc, char *argv[])
 {
   // Start up SDL and create window

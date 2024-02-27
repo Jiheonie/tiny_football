@@ -20,7 +20,8 @@ private:
   SDL_Texture *image;
   float rad;
   bool turnLeft;
-  std::vector<Vector2D *> moveVector;
+  bool isMoving;
+  bool isJumping;
 
 public:
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
