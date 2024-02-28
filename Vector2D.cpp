@@ -17,6 +17,14 @@ float Vector2D::getY()
   return y;
 }
 
+void Vector2D::setX(float newX) {
+  x = newX;
+}
+
+void Vector2D::setY(float newY) {
+  y = newY;
+}
+
 Vector2D Vector2D::operator+(Vector2D const &other)
 {
   float newX = x + other.x;

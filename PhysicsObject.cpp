@@ -2,8 +2,8 @@
 
 PhysicsObject::PhysicsObject(float x, float y, float m)
 {
-  // forces = {Vector2D(0, 1)};
-  forces = {};
+  forces = {Vector2D(0, 100)};
+  // forces = {};
   acceleration = Vector2D();
   velocity = Vector2D();
   position = Vector2D(x, y);
@@ -24,4 +24,10 @@ void PhysicsObject::update(float deltaTime)
   acceleration = sumOfForces / mass;
 
   velocity = avgVelocity + acceleration * deltaTime / 2.0f;
+
+  if (position.getY() > 300)
+  {
+    position.setY(300);
+    velocity.setY(0);
+  }
 }

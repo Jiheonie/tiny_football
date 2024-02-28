@@ -47,11 +47,12 @@ void Player::move(char m)
     }
     break;
   case 'j':
-    if (!isJumping)
+    if (!isJumping && position.getY() == 300)
     {
-      forces.insert(forces.begin(), Vector2D(0, -200));
+      forces.insert(forces.begin(), Vector2D(0, -115000));
       isJumping = true;
       printf("j");
+      printf("Vel: %f,%f", velocity.getX(), velocity.getY());
     }
     break;
   case 'd':
@@ -59,6 +60,7 @@ void Player::move(char m)
     {
       forces.erase(forces.begin());
       isJumping = false;
+      printf("d\n");
     }
 
   default:
@@ -70,7 +72,7 @@ void Player::stop()
 {
   if (isMoving)
   {
-    int nForces = isJumping ? 1 : 0;
+    int nForces = isJumping ? 2 : 1;
     while (forces.size() > nForces)
     {
       forces.pop_back();

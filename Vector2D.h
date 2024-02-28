@@ -15,6 +15,8 @@ public:
   Vector2D(float newX, float newY);
   float getX();
   float getY();
+  void setX(float newX);
+  void setY(float newY);
   Vector2D operator+(Vector2D const &other);
   Vector2D operator-(Vector2D const &other);
   Vector2D operator*(float const &mass);
