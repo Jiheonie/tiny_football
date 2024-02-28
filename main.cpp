@@ -9,6 +9,8 @@
 #include "Player.h"
 #include "Vector2D.h"
 
+#define FPS 60
+
 SDL_Texture *background = NULL;
 
 SDL_Window *window = NULL;
@@ -54,9 +56,17 @@ int main(int argc, char *argv[])
   // Event Handler
   SDL_Event event;
 
+  float lastTime = ((float)SDL_GetTicks()) / ((float)FPS);
+
   // while application is running
   while (!quit)
   {
+    float newTime = ((float)SDL_GetTicks()) / ((float)FPS);
+
+    float dt = newTime - lastTime;
+    // printf("FPS: %f\n", 1 / dt);
+    lastTime = newTime;
+
     while (SDL_PollEvent(&event))
     {
       if (event.type == SDL_QUIT)
@@ -64,9 +74,9 @@ int main(int argc, char *argv[])
         quit = true;
       }
 
+      const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
       if (event.type == SDL_KEYDOWN)
       {
-        const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
         if (currentKeyStates[SDL_SCANCODE_A])
         {
           blueSelectedPlayer->move('l');
@@ -111,6 +121,14 @@ int main(int argc, char *argv[])
 
       if (event.type == SDL_KEYUP)
       {
+        if (!currentKeyStates[SDL_SCANCODE_A] && !currentKeyStates[SDL_SCANCODE_D])
+        {
+          blueSelectedPlayer->stop();
+        }
+        if (!currentKeyStates[SDL_SCANCODE_J] && !currentKeyStates[SDL_SCANCODE_L])
+        {
+          redSelectedPlayer->stop();
+        }
       }
     }
 
@@ -127,6 +145,13 @@ int main(int argc, char *argv[])
 
     // Update screen
     SDL_RenderPresent(renderer);
+
+    blueTeam->update(dt);
+    redTeam->update(dt);
+    soccerBall->update(dt);
+
+    blueTeam->drop();
+    redTeam->drop();
   }
 
   // Free resourcs and close SDL

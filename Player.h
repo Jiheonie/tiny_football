@@ -27,6 +27,7 @@ public:
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
   void draw(SDL_Renderer *renderer);
   void move(char m);
+  void stop();
   void shoot();
 };
 
@@ -41,8 +42,10 @@ public:
   Team(TeamEnum c);
   Player *selectPlayer();
   void addPlayer(Player *p);
+  void drop();
   void switchPlayer();
   void draw(SDL_Renderer *renderer);
+  void update(float dt);
 };
 
 #endif

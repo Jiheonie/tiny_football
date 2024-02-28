@@ -31,38 +31,52 @@ void Player::move(char m)
   case 'l':
     if (!isMoving)
     {
-      forces.push_back(Vector2D(-10, 0));
+      forces.push_back(Vector2D(-100, 0));
       turnLeft = true;
       isMoving = true;
+      std::cout << "l." << position.getX() << "." << position.getY() << std::endl;
     }
     break;
   case 'r':
     if (!isMoving)
     {
-      forces.push_back(Vector2D(10, 0));
+      forces.push_back(Vector2D(100, 0));
       turnLeft = false;
       isMoving = true;
+      std::cout << "r." << position.getX() << "." << position.getY() << std::endl;
     }
     break;
   case 'j':
     if (!isJumping)
     {
-      forces.push_back(Vector2D(0, 20));
+      forces.insert(forces.begin(), Vector2D(0, -200));
       isJumping = true;
+      printf("j");
     }
     break;
-  case 's':
-    if (isMoving)
+  case 'd':
+    if (isJumping)
     {
-      // stop
-      isMoving = false;
+      forces.erase(forces.begin());
+      isJumping = false;
     }
-    break;
 
   default:
     break;
   }
-  std::cout << m;
+}
+
+void Player::stop()
+{
+  if (isMoving)
+  {
+    int nForces = isJumping ? 1 : 0;
+    while (forces.size() > nForces)
+    {
+      forces.pop_back();
+    }
+    isMoving = false;
+  }
 }
 
 Team::Team(TeamEnum c)
@@ -81,6 +95,14 @@ void Team::addPlayer(Player *p)
   players.push_back(p);
 }
 
+void Team::drop()
+{
+  for (int i = 0; i < players.size(); i++)
+  {
+    players[i]->move('d');
+  }
+}
+
 void Team::switchPlayer()
 {
   selectedNumber += 1;
@@ -94,5 +116,13 @@ void Team::draw(SDL_Renderer *renderer)
   for (int i = 0; i < players.size(); i++)
   {
     players[i]->draw(renderer);
+  }
+}
+
+void Team::update(float dt)
+{
+  for (int i = 0; i < players.size(); i++)
+  {
+    players[i]->update(dt);
   }
 }

@@ -2,14 +2,15 @@
 
 PhysicsObject::PhysicsObject(float x, float y, float m)
 {
-  forces = {Vector2D(0, 10)};
+  // forces = {Vector2D(0, 1)};
+  forces = {};
   acceleration = Vector2D();
   velocity = Vector2D();
   position = Vector2D(x, y);
   mass = m;
 }
 
-void PhysicsObject::Update(float deltaTime)
+void PhysicsObject::update(float deltaTime)
 {
   Vector2D sumOfForces = Vector2D();
   for (int i = 0; i < forces.size(); i++)

@@ -1,10 +1,11 @@
-#include<SDL2/SDL.h>
-#include<string>
+#include <SDL2/SDL.h>
+#include <string>
 
 #ifndef INIT_H
 #define INIT_H
 
-const int WIDTH = 800, HEIGHT = 600;
+#define WIDTH 1280
+#define HEIGHT 720
 
 // The window we'll be rendering to
 extern SDL_Window *window;

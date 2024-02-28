@@ -17,7 +17,7 @@ protected:
 
 public:
   PhysicsObject(float x, float y, float m);
-  void Update(float deltaTime);
+  void update(float deltaTime);
 };
 
 #endif
