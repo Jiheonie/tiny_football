@@ -25,9 +25,9 @@ void PhysicsObject::update(float deltaTime)
 
   velocity = avgVelocity + acceleration * deltaTime / 2.0f;
 
-  if (position.getY() > 300)
+  if (position.getY() > groundY)
   {
-    position.setY(300);
+    position.setY(groundY);
     velocity.setY(0);
   }
 }

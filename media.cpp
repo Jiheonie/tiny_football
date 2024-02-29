@@ -11,7 +11,7 @@ bool loadMedia(SDL_Renderer *renderer, SDL_Surface *screenSurface)
 
   // Loadsplash image
   // helloWorld = loadTexture("assets/hello_world.bmp", renderer, screenSurface);
-  background = loadTexture("assets/helloWorld.png", renderer, screenSurface);
+  background = loadTexture("assets/bg.png", renderer, screenSurface);
   if (background == NULL)
   {
     std::cout << "Unable to load image "

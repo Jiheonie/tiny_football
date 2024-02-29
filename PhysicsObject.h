@@ -6,6 +6,8 @@
 #ifndef PHYSICSOBJECT_H
 #define PHYSICSOBJECT_H
 
+extern int groundY;
+
 class PhysicsObject
 {
 protected:

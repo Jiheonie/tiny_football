@@ -8,8 +8,12 @@
 #include "Ball.h"
 #include "Player.h"
 #include "Vector2D.h"
+#include "PhysicsObject.h"
+#include "Goal.h"
 
 #define FPS 60
+
+int groundY = 665;
 
 SDL_Texture *background = NULL;
 
@@ -39,16 +43,19 @@ int main(int argc, char *argv[])
   }
 
   Team *blueTeam = new Team(Blue);
-  blueTeam->addPlayer(new Player(Blue, 100, 300, renderer, screenSurface));
-  blueTeam->addPlayer(new Player(Blue, 200, 300, renderer, screenSurface));
+  blueTeam->addPlayer(new Player(Blue, 100, groundY, renderer, screenSurface));
+  blueTeam->addPlayer(new Player(Blue, 300, groundY, renderer, screenSurface));
   Player *blueSelectedPlayer = blueTeam->selectPlayer();
 
   Team *redTeam = new Team(Red);
-  redTeam->addPlayer(new Player(Red, 500, 300, renderer, screenSurface));
-  redTeam->addPlayer(new Player(Red, 400, 300, renderer, screenSurface));
+  redTeam->addPlayer(new Player(Red, 1180, groundY, renderer, screenSurface));
+  redTeam->addPlayer(new Player(Red, 980, groundY, renderer, screenSurface));
   Player *redSelectedPlayer = redTeam->selectPlayer();
 
   Ball *soccerBall = new Ball(renderer, screenSurface);
+
+  Goal *blueGoal = new Goal(Blue, 0, 720 - 256, renderer, screenSurface);
+  Goal *redGoal = new Goal(Red, 1280 - 128, 720 - 256, renderer, screenSurface);
 
   // Main Loop Flag
   bool quit = false;
@@ -142,6 +149,9 @@ int main(int argc, char *argv[])
     redTeam->draw(renderer);
 
     soccerBall->draw(renderer);
+
+    blueGoal->draw(renderer);
+    redGoal->draw(renderer);
 
     // Update screen
     SDL_RenderPresent(renderer);

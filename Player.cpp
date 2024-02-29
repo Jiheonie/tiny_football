@@ -17,7 +17,7 @@ void Player::draw(SDL_Renderer *renderer)
 {
   SDL_Rect playerRect;
   playerRect.w = playerRect.h = rad * 2;
-  playerRect.x = position.getX() + rad;
+  playerRect.x = position.getX() - rad;
   playerRect.y = position.getY() - rad;
 
   SDL_RendererFlip flip = (turnLeft == true) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
@@ -47,7 +47,7 @@ void Player::move(char m)
     }
     break;
   case 'j':
-    if (!isJumping && position.getY() == 300)
+    if (!isJumping && position.getY() == groundY)
     {
       forces.insert(forces.begin(), Vector2D(0, -115000));
       isJumping = true;
