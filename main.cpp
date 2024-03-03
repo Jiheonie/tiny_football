@@ -10,6 +10,7 @@
 #include "Vector2D.h"
 #include "PhysicsObject.h"
 #include "Goal.h"
+#include "utils.h"
 
 #define FPS 60
 
@@ -84,20 +85,28 @@ int main(int argc, char *argv[])
       const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
       if (event.type == SDL_KEYDOWN)
       {
-        if (currentKeyStates[SDL_SCANCODE_A])
+        if (currentKeyStates[SDL_SCANCODE_A] && currentKeyStates[SDL_SCANCODE_D])
+        {
+          blueSelectedPlayer->stop();
+        }
+        else if (currentKeyStates[SDL_SCANCODE_A])
         {
           blueSelectedPlayer->move('l');
         }
-        if (currentKeyStates[SDL_SCANCODE_D])
+        else if (currentKeyStates[SDL_SCANCODE_D])
         {
           blueSelectedPlayer->move('r');
         }
 
-        if (currentKeyStates[SDL_SCANCODE_J])
+        if (currentKeyStates[SDL_SCANCODE_J] && currentKeyStates[SDL_SCANCODE_L])
+        {
+          redSelectedPlayer->stop();
+        }
+        else if (currentKeyStates[SDL_SCANCODE_J])
         {
           redSelectedPlayer->move('l');
         }
-        if (currentKeyStates[SDL_SCANCODE_L])
+        else if (currentKeyStates[SDL_SCANCODE_L])
         {
           redSelectedPlayer->move('r');
         }
@@ -139,6 +148,13 @@ int main(int argc, char *argv[])
       }
     }
 
+    blueTeam->update(dt);
+    redTeam->update(dt);
+    soccerBall->update(dt);
+
+    blueTeam->drop();
+    redTeam->drop();
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
 
@@ -156,12 +172,63 @@ int main(int argc, char *argv[])
     // Update screen
     SDL_RenderPresent(renderer);
 
-    blueTeam->update(dt);
-    redTeam->update(dt);
-    soccerBall->update(dt);
+    for (int i = 0; i < 4; i++)
+    {
+      Player *p = Player::_allPlayers[i];
+      Vector2D cPoint = collidePlayerAndBall(p, soccerBall);
+      if (!isRootVector(cPoint))
+      {
+        if (cPoint.getX() > p->getPosition().getX() && !p->getTurnLeft())
+        {
+          p->setVelocity(0, p->getVelocity().getY());
+          p->setPosition(p->getPosition().getX() - 1, p->getPosition().getY());
+        }
+        else if (cPoint.getX() < p->getPosition().getX() && p->getTurnLeft())
+        {
+          p->setVelocity(0, p->getVelocity().getY());
+          p->setPosition(p->getPosition().getX() + 1, p->getPosition().getY());
+        }
+      }
+    }
 
-    blueTeam->drop();
-    redTeam->drop();
+    for (int i = 0; i < 4; i++)
+    {
+      for (int j = 0; j < 4; j++)
+      {
+        Player *p1 = Player::_allPlayers[i];
+        Player *p2 = Player::_allPlayers[j];
+        if (p1 != p2)
+        {
+          Vector2D cPoint = collidePlayerAndPlayer(p1, p2);
+          if (!isRootVector(cPoint))
+          {
+            if (p1->getPosition().getX() < cPoint.getX() < p2->getPosition().getX())
+            {
+              p1->setVelocity(0, p1->getVelocity().getY());
+              p1->setPosition(p1->getPosition().getX() - 5, p1->getPosition().getY());
+
+              p2->setVelocity(0, p2->getVelocity().getY());
+              p2->setPosition(p2->getPosition().getX() + 5, p2->getPosition().getY());
+            }
+            else if (p1->getPosition().getX() > cPoint.getX() > p2->getPosition().getX())
+            {
+              p1->setVelocity(0, p1->getVelocity().getY());
+              p1->setPosition(p1->getPosition().getX() + 5, p1->getPosition().getY());
+
+              p2->setVelocity(0, p2->getVelocity().getY());
+              p2->setPosition(p2->getPosition().getX() - 5, p2->getPosition().getY());
+            }
+          }
+        }
+      }
+    }
+
+    // blueTeam->update(dt);
+    // redTeam->update(dt);
+    // soccerBall->update(dt);
+
+    // blueTeam->drop();
+    // redTeam->drop();
   }
 
   // Free resourcs and close SDL

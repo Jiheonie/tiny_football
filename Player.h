@@ -24,7 +24,10 @@ private:
   bool isJumping;
 
 public:
+  static std::vector<Player *> _allPlayers;
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
+  float getRadius();
+  bool getTurnLeft();
   void draw(SDL_Renderer *renderer);
   void move(char m);
   void stop();
@@ -42,6 +45,7 @@ public:
   Team(TeamEnum c);
   Player *selectPlayer();
   void addPlayer(Player *p);
+  Player *getPlayerByIdx(int i);
   void drop();
   void switchPlayer();
   void draw(SDL_Renderer *renderer);

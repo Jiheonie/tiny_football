@@ -3,11 +3,17 @@
 #include "utils.h"
 #include "media.h"
 
-Ball::Ball(SDL_Renderer *renderer, SDL_Surface *screenSurface) : PhysicsObject(640, 300, 10)
+Ball::Ball(SDL_Renderer *renderer, SDL_Surface *screenSurface)
+    : PhysicsObject(640, 300, 10)
 {
   image = loadTexture("assets/ball.png", renderer, screenSurface);
   rad = 50;
   degree = 0;
+}
+
+float Ball::getRadius()
+{
+  return rad;
 }
 
 void Ball::draw(SDL_Renderer *renderer)
@@ -19,3 +25,8 @@ void Ball::draw(SDL_Renderer *renderer)
 
   SDL_RenderCopyEx(renderer, image, NULL, &ballRect, degree, NULL, SDL_FLIP_NONE);
 }
+
+void Ball::touch(float x, float y)
+{
+  forces.push_back(Vector2D(x, y));
+                                                           }

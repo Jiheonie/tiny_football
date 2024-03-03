@@ -1,8 +1,12 @@
 #include "Player.h"
 #include "media.h"
+#include "utils.h"
 #include "string"
 
-Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface) : PhysicsObject(x, y, 50)
+std::vector<Player *> Player::_allPlayers = {};
+
+Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface)
+    : PhysicsObject(x, y, 50)
 {
   team = t;
   std::string path = (t == Blue) ? "assets/blueHead.png" : "assets/redHead.png";
@@ -11,7 +15,19 @@ Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface
   turnLeft = (t == Blue) ? false : true;
   isMoving = false;
   isJumping = false;
+
+  _allPlayers.push_back(this);
 };
+
+float Player::getRadius()
+{
+  return rad;
+}
+
+bool Player::getTurnLeft()
+{
+  return turnLeft;
+}
 
 void Player::draw(SDL_Renderer *renderer)
 {
@@ -49,7 +65,7 @@ void Player::move(char m)
   case 'j':
     if (!isJumping && position.getY() == groundY)
     {
-      forces.insert(forces.begin(), Vector2D(0, -115000));
+      forces.insert(forces.begin(), Vector2D(0, -300000));
       isJumping = true;
       printf("j");
       printf("Vel: %f,%f", velocity.getX(), velocity.getY());
@@ -77,6 +93,7 @@ void Player::stop()
     {
       forces.pop_back();
     }
+    velocity.setX(0);
     isMoving = false;
   }
 }
@@ -95,6 +112,11 @@ Player *Team::selectPlayer()
 void Team::addPlayer(Player *p)
 {
   players.push_back(p);
+}
+
+Player *Team::getPlayerByIdx(int i)
+{
+  return players[i];
 }
 
 void Team::drop()
@@ -125,6 +147,7 @@ void Team::update(float dt)
 {
   for (int i = 0; i < players.size(); i++)
   {
+    collidePlayerAndWall(players[i]);
     players[i]->update(dt);
   }
 }

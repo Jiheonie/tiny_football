@@ -18,8 +18,9 @@ private:
 
 public:
   Ball(SDL_Renderer *renderer, SDL_Surface *screenSurface);
+  float getRadius();
   void draw(SDL_Renderer *renderer);
-  void move();
+  void touch(float x, float y);
 };
 
 #endif
