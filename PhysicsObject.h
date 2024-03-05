@@ -20,7 +20,9 @@ protected:
 public:
   PhysicsObject(float x, float y, float m);
   void update(float deltaTime);
-    Vector2D getPosition();
+  Vector2D getSumOfForces();
+  void resetForces();
+  Vector2D getPosition();
   void setPosition(float x, float y);
   Vector2D getVelocity();
   void setVelocity(float x, float y);

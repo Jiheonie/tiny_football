@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
+#include <cmath>
 
 #include "media.h"
 #include "init.h"
@@ -183,23 +184,88 @@ int main(int argc, char *argv[])
     // Update screen
     SDL_RenderPresent(renderer);
 
+    int numOfTouching = 0;
     for (int i = 0; i < 4; i++)
     {
       Player *p = Player::_allPlayers[i];
       Vector2D cPoint = collidePlayerAndBall(p, soccerBall);
       if (!isRootVector(cPoint))
       {
-        if (cPoint.getX() > p->getPosition().getX() && !p->getTurnLeft())
+        numOfTouching += 1;
+        Vector2D sumF = p->getSumOfForces();
+        float fX = sumF.getX();
+        float fY = sumF.getY();
+        float cX = cPoint.getX() - p->getPosition().getX();
+        float cY = cPoint.getY() - p->getPosition().getY();
+        float scalar2 = pow(fX * cX + fY * cY, 2);
+        float lProd2 = (pow(fX, 2) + pow(fY, 2)) * (pow(cX, 2) + pow(cY, 2));
+        float cos2 = scalar2 / lProd2;
+        float lss2 = cos2 * (pow(fX, 2) + pow(fY, 2));
+        float lC2 = pow(cX, 2) + pow(cY, 2);
+        float ssX = std::sqrt(lss2 / lC2 * pow(cX, 2));
+        float ssY = std::sqrt(lss2 / lC2 * pow(cY, 2));
+
+        printf("ss--%f--%f\n", ssX, ssY);
+
+        p->setVelocity(0, 0);
+        Vector2D sumBF = soccerBall->getSumOfForces();
+        float fYFix = (soccerBall->getPosition().getY() == cPoint.getY()) ? 0 : sumBF.getY();
+        printf("%f--%f\n", ssX - sumBF.getX(), ssY - fYFix);
+        soccerBall->touch(ssX - sumBF.getX(), ssY - fYFix);
+
+        float dSepX = 0;
+        float dSepY = 0;
+        if (cX > 0 && cY > 0)
         {
-          p->setVelocity(0, p->getVelocity().getY());
-          p->setPosition(p->getPosition().getX() - 1, p->getPosition().getY());
+          dSepX = -10;
+          dSepY = -10;
         }
-        else if (cPoint.getX() < p->getPosition().getX() && p->getTurnLeft())
+        if (cX > 0 && cY < 0)
         {
-          p->setVelocity(0, p->getVelocity().getY());
-          p->setPosition(p->getPosition().getX() + 1, p->getPosition().getY());
+          dSepX = -10;
+          dSepY = 10;
         }
+        if (cX > 0 && cY == 0)
+        {
+          dSepX = -10;
+          dSepY = -10;
+        }
+        if (cX < 0 && cY < 0)
+        {
+          dSepX = 10;
+          dSepY = 10;
+        }
+        if (cX < 0 && cY > 0)
+        {
+          dSepX = 10;
+          dSepY = -10;
+        }
+        if (cX < 0 && cY == 0)
+        {
+          dSepX = 10;
+          dSepY = -10;
+        }
+        if (cX == 0 && cY > 0)
+        {
+          dSepX = -10;
+        }
+        if (cX == 0 && cY < 0)
+        {
+          dSepX = 10;
+        }
+
+        p->setPosition(
+            p->getPosition().getX() + dSepX,
+            p->getPosition().getY() + dSepY);
+
+        soccerBall->setPosition(
+            soccerBall->getPosition().getX() - dSepX,
+            soccerBall->getPosition().getY() - dSepY);
       }
+    }
+    if (numOfTouching == 0)
+    {
+      soccerBall->resetForces();
     }
 
     for (int i = 0; i < 4; i++)
@@ -215,14 +281,11 @@ int main(int argc, char *argv[])
           {
             if (p1->getPosition().getX() < cPoint.getX() && cPoint.getX() < p2->getPosition().getX())
             {
-              printf("hihi1\n");
-              printf("%f--%f--%f\n", p1->getPosition().getX(), cPoint.getX(), p2->getPosition().getX());
               p1->setPosition(p1->getPosition().getX() - 5, p1->getPosition().getY());
               p2->setPosition(p2->getPosition().getX() + 5, p2->getPosition().getY());
             }
             else if (p1->getPosition().getX() >= cPoint.getX() && cPoint.getX() >= p2->getPosition().getX())
             {
-              printf("hihi2\n");
               p1->setPosition(p1->getPosition().getX() + 5, p1->getPosition().getY());
               p2->setPosition(p2->getPosition().getX() - 5, p2->getPosition().getY());
             }

@@ -12,18 +12,7 @@ PhysicsObject::PhysicsObject(float x, float y, float m)
 
 void PhysicsObject::update(float deltaTime)
 {
-  Vector2D sumOfForces = Vector2D();
-  for (int i = 0; i < forces.size(); i++)
-  {
-    sumOfForces = sumOfForces + forces[i];
-  }
-  // Vector2D avgVelocity = velocity + acceleration * deltaTime / 2.0f;
-
-  // position = position + avgVelocity * deltaTime;
-
-  // acceleration = sumOfForces / mass;
-
-  // velocity = avgVelocity + acceleration * deltaTime / 2.0f;
+  Vector2D sumOfForces = getSumOfForces();
 
   acceleration = sumOfForces / mass;
 
@@ -36,6 +25,27 @@ void PhysicsObject::update(float deltaTime)
     position.setY(groundY);
     velocity.setY(0);
   }
+}
+
+Vector2D PhysicsObject::getSumOfForces()
+{
+  Vector2D sumOfForces = Vector2D();
+  for (int i = 0; i < forces.size(); i++)
+  {
+    sumOfForces = sumOfForces + forces[i];
+  }
+
+  return sumOfForces;
+}
+
+void PhysicsObject::resetForces()
+{
+  while (forces.size() > 1)
+  {
+    forces.pop_back();
+  }
+  acceleration = Vector2D();
+  velocity.setX(velocity.getX() * 0.99);
 }
 
 Vector2D PhysicsObject::getPosition()
