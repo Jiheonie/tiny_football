@@ -29,4 +29,4 @@ void Ball::draw(SDL_Renderer *renderer)
 void Ball::touch(float x, float y)
 {
   forces.push_back(Vector2D(x, y));
-                                                           }
+}

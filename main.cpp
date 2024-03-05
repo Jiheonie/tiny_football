@@ -12,7 +12,7 @@
 #include "Goal.h"
 #include "utils.h"
 
-#define FPS 60
+#define FPS 60.0
 
 int groundY = 665;
 
@@ -72,8 +72,14 @@ int main(int argc, char *argv[])
     float newTime = ((float)SDL_GetTicks()) / ((float)FPS);
 
     float dt = newTime - lastTime;
+
+    // if (dt > 1.0 / 60.0)
+    //   dt = 1.0 / 60.0;
+
     // printf("FPS: %f\n", 1 / dt);
     lastTime = newTime;
+
+    SDL_Delay(1 / FPS);
 
     while (SDL_PollEvent(&event))
     {
@@ -148,6 +154,11 @@ int main(int argc, char *argv[])
       }
     }
 
+    if (blueSelectedPlayer->getIsJumpint())
+    {
+      printf("Dt: %f\n", dt);
+    }
+
     blueTeam->update(dt);
     redTeam->update(dt);
     soccerBall->update(dt);
@@ -202,33 +213,23 @@ int main(int argc, char *argv[])
           Vector2D cPoint = collidePlayerAndPlayer(p1, p2);
           if (!isRootVector(cPoint))
           {
-            if (p1->getPosition().getX() < cPoint.getX() < p2->getPosition().getX())
+            if (p1->getPosition().getX() < cPoint.getX() && cPoint.getX() < p2->getPosition().getX())
             {
-              p1->setVelocity(0, p1->getVelocity().getY());
+              printf("hihi1\n");
+              printf("%f--%f--%f\n", p1->getPosition().getX(), cPoint.getX(), p2->getPosition().getX());
               p1->setPosition(p1->getPosition().getX() - 5, p1->getPosition().getY());
-
-              p2->setVelocity(0, p2->getVelocity().getY());
               p2->setPosition(p2->getPosition().getX() + 5, p2->getPosition().getY());
             }
-            else if (p1->getPosition().getX() > cPoint.getX() > p2->getPosition().getX())
+            else if (p1->getPosition().getX() >= cPoint.getX() && cPoint.getX() >= p2->getPosition().getX())
             {
-              p1->setVelocity(0, p1->getVelocity().getY());
+              printf("hihi2\n");
               p1->setPosition(p1->getPosition().getX() + 5, p1->getPosition().getY());
-
-              p2->setVelocity(0, p2->getVelocity().getY());
               p2->setPosition(p2->getPosition().getX() - 5, p2->getPosition().getY());
             }
           }
         }
       }
     }
-
-    // blueTeam->update(dt);
-    // redTeam->update(dt);
-    // soccerBall->update(dt);
-
-    // blueTeam->drop();
-    // redTeam->drop();
   }
 
   // Free resourcs and close SDL

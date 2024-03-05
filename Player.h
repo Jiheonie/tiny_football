@@ -27,6 +27,7 @@ public:
   static std::vector<Player *> _allPlayers;
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
   float getRadius();
+  bool getIsJumpint();
   bool getTurnLeft();
   void draw(SDL_Renderer *renderer);
   void move(char m);

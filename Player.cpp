@@ -24,6 +24,11 @@ float Player::getRadius()
   return rad;
 }
 
+bool Player::getIsJumpint()
+{
+  return isJumping;
+}
+
 bool Player::getTurnLeft()
 {
   return turnLeft;
@@ -67,8 +72,10 @@ void Player::move(char m)
     {
       forces.insert(forces.begin(), Vector2D(0, -300000));
       isJumping = true;
-      printf("j");
-      printf("Vel: %f,%f", velocity.getX(), velocity.getY());
+      printf("Vel: %f,%f\n", velocity.getX(), velocity.getY());
+      printf("%f\n", velocity.getY());
+      printf("%f\n", acceleration.getY());
+      printf("%d\n", forces.size());
     }
     break;
   case 'd':
@@ -76,6 +83,7 @@ void Player::move(char m)
     {
       forces.erase(forces.begin());
       isJumping = false;
+      printf("%f\n", velocity.getY());
       printf("d\n");
     }
 

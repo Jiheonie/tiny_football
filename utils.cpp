@@ -55,7 +55,7 @@ Vector2D collidePlayerAndPlayer(Player *p1, Player *p2)
 
   if (d2 <= rSum2)
   {
-    printf("Collide\n");
+    // printf("Collide\n");
     float cX = (p1Pos.getX() - p2Pos.getX()) / 2 + p2Pos.getX();
     float cY = (p1Pos.getY() - p2Pos.getY()) / 2 + p2Pos.getY();
     return Vector2D(cX, cY);
