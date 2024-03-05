@@ -73,8 +73,8 @@ int main(int argc, char *argv[])
 
     float dt = newTime - lastTime;
 
-    // if (dt > 1.0 / 60.0)
-    //   dt = 1.0 / 60.0;
+    if (dt > 1.0 / 60.0)
+      dt = 1.0 / 60.0;
 
     // printf("FPS: %f\n", 1 / dt);
     lastTime = newTime;
