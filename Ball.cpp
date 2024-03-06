@@ -28,13 +28,10 @@ void Ball::draw(SDL_Renderer *renderer)
 
 void Ball::touch(float x, float y)
 {
-  if (velocity.getX() != 0 || velocity.getY() != 0)
-  {
-    velocity.setX(0);
-    velocity.setY(0);
-    acceleration.setX(0);
-    acceleration.setY(0);
-  }
-  forces.pop_back();
+  if (x * velocity.getX() <= 0)
+    velocity.setX(-1 * velocity.getX());
+  if (y * velocity.getY() <= 0)
+    velocity.setY(-1 * velocity.getY());
+
   forces.push_back(Vector2D(x, y));
 }

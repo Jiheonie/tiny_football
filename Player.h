@@ -6,6 +6,7 @@
 #include <vector>
 #include "Vector2D.h"
 #include "PhysicsObject.h"
+#include "Ball.h"
 
 enum TeamEnum
 {
@@ -22,17 +23,20 @@ private:
   bool turnLeft;
   bool isMoving;
   bool isJumping;
+  bool isShooting;
 
 public:
   static std::vector<Player *> _allPlayers;
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
   float getRadius();
   bool getIsJumpint();
+  bool getIsShooting();
+  void setIsShooting(bool b);
   bool getTurnLeft();
   void draw(SDL_Renderer *renderer);
   void move(char m);
   void stop();
-  void shoot();
+  void shoot(char d, Ball *b);
 };
 
 class Team

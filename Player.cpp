@@ -15,6 +15,7 @@ Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface
   turnLeft = (t == Blue) ? false : true;
   isMoving = false;
   isJumping = false;
+  isShooting = false;
 
   _allPlayers.push_back(this);
 };
@@ -27,6 +28,16 @@ float Player::getRadius()
 bool Player::getIsJumpint()
 {
   return isJumping;
+}
+
+bool Player::getIsShooting()
+{
+  return isShooting;
+}
+
+void Player::setIsShooting(bool b)
+{
+  isShooting = b;
 }
 
 bool Player::getTurnLeft()
@@ -52,7 +63,7 @@ void Player::move(char m)
   case 'l':
     if (!isMoving)
     {
-      forces.push_back(Vector2D(-100, 0));
+      forces.push_back(Vector2D(-500, 0));
       turnLeft = true;
       isMoving = true;
       std::cout << "l." << position.getX() << "." << position.getY() << std::endl;
@@ -61,7 +72,7 @@ void Player::move(char m)
   case 'r':
     if (!isMoving)
     {
-      forces.push_back(Vector2D(100, 0));
+      forces.push_back(Vector2D(500, 0));
       turnLeft = false;
       isMoving = true;
       std::cout << "r." << position.getX() << "." << position.getY() << std::endl;
@@ -73,9 +84,6 @@ void Player::move(char m)
       forces.insert(forces.begin(), Vector2D(0, -300000));
       isJumping = true;
       printf("Vel: %f,%f\n", velocity.getX(), velocity.getY());
-      printf("%f\n", velocity.getY());
-      printf("%f\n", acceleration.getY());
-      printf("%d\n", forces.size());
     }
     break;
   case 'd':
@@ -98,11 +106,28 @@ void Player::stop()
   {
     int nForces = isJumping ? 2 : 1;
     while (forces.size() > nForces)
-    {
       forces.pop_back();
-    }
     velocity.setX(0);
     isMoving = false;
+    isShooting = false;
+  }
+}
+
+void Player::shoot(char d, Ball *b)
+{
+  if (d == 'r')
+  {
+    forces.push_back(Vector2D(1000, 0));
+    isMoving = true;
+    turnLeft = false;
+    isShooting = true;
+  }
+  if (d == 'l')
+  {
+    forces.push_back(Vector2D(-1000, 0));
+    isMoving = true;
+    turnLeft = true;
+    isShooting = true;
   }
 }
 
@@ -130,9 +155,7 @@ Player *Team::getPlayerByIdx(int i)
 void Team::drop()
 {
   for (int i = 0; i < players.size(); i++)
-  {
     players[i]->move('d');
-  }
 }
 
 void Team::switchPlayer()

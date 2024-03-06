@@ -23,7 +23,10 @@ void PhysicsObject::update(float deltaTime)
   if (position.getY() > groundY)
   {
     position.setY(groundY);
-    velocity.setY(0);
+    if (velocity.getY() > 0)
+      velocity.setY(0);
+    if (acceleration.getY() > 0)
+      acceleration.setY(0);
   }
 }
 
@@ -34,7 +37,6 @@ Vector2D PhysicsObject::getSumOfForces()
   {
     sumOfForces = sumOfForces + forces[i];
   }
-
   return sumOfForces;
 }
 
@@ -45,7 +47,7 @@ void PhysicsObject::resetForces()
     forces.pop_back();
   }
   acceleration = Vector2D();
-  velocity.setX(velocity.getX() * 0.99);
+  velocity.setX(velocity.getX() * 0.9999);
 }
 
 Vector2D PhysicsObject::getPosition()

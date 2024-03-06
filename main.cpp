@@ -65,22 +65,21 @@ int main(int argc, char *argv[])
   // Event Handler
   SDL_Event event;
 
-  float lastTime = ((float)SDL_GetTicks()) / ((float)FPS);
+  float lastTime = ((float)SDL_GetTicks()) * 1000 / ((float)FPS) / 1000;
 
   // while application is running
   while (!quit)
   {
-    float newTime = ((float)SDL_GetTicks()) / ((float)FPS);
-
+    float newTime = ((float)SDL_GetTicks()) * 1000 / ((float)FPS) / 1000;
+    // printf("%f--%f\n", newTime, lastTime);
     float dt = newTime - lastTime;
 
-    if (dt > 1.0 / 60.0)
-      dt = 1.0 / 60.0;
+    if (dt > 1.0 / FPS)
+      dt = 1.0 / FPS;
 
-    // printf("FPS: %f\n", 1 / dt);
     lastTime = newTime;
 
-    SDL_Delay(1 / FPS);
+    SDL_Delay(1.0 / FPS);
 
     while (SDL_PollEvent(&event))
     {
@@ -93,52 +92,44 @@ int main(int argc, char *argv[])
       if (event.type == SDL_KEYDOWN)
       {
         if (currentKeyStates[SDL_SCANCODE_A] && currentKeyStates[SDL_SCANCODE_D])
-        {
           blueSelectedPlayer->stop();
-        }
         else if (currentKeyStates[SDL_SCANCODE_A])
-        {
           blueSelectedPlayer->move('l');
-        }
         else if (currentKeyStates[SDL_SCANCODE_D])
-        {
           blueSelectedPlayer->move('r');
-        }
 
         if (currentKeyStates[SDL_SCANCODE_J] && currentKeyStates[SDL_SCANCODE_L])
-        {
           redSelectedPlayer->stop();
-        }
         else if (currentKeyStates[SDL_SCANCODE_J])
-        {
           redSelectedPlayer->move('l');
-        }
         else if (currentKeyStates[SDL_SCANCODE_L])
-        {
           redSelectedPlayer->move('r');
-        }
 
         if (event.key.repeat == 0)
         {
+          if (currentKeyStates[SDL_SCANCODE_E])
+            blueSelectedPlayer->shoot('r', soccerBall);
+          if (currentKeyStates[SDL_SCANCODE_Q])
+            blueSelectedPlayer->shoot('l', soccerBall);
           if (currentKeyStates[SDL_SCANCODE_S])
           {
             blueTeam->switchPlayer();
             blueSelectedPlayer = blueTeam->selectPlayer();
           }
           if (currentKeyStates[SDL_SCANCODE_W])
-          {
             blueSelectedPlayer->move('j');
-          }
 
+          if (currentKeyStates[SDL_SCANCODE_U])
+            redSelectedPlayer->shoot('l', soccerBall);
+          if (currentKeyStates[SDL_SCANCODE_O])
+            redSelectedPlayer->shoot('r', soccerBall);
           if (currentKeyStates[SDL_SCANCODE_K])
           {
             redTeam->switchPlayer();
             redSelectedPlayer = redTeam->selectPlayer();
           }
           if (currentKeyStates[SDL_SCANCODE_I])
-          {
             redSelectedPlayer->move('j');
-          }
         }
       }
 
@@ -200,18 +191,28 @@ int main(int argc, char *argv[])
         float scalar2 = pow(fX * cX + fY * cY, 2);
         float lProd2 = (pow(fX, 2) + pow(fY, 2)) * (pow(cX, 2) + pow(cY, 2));
         float cos2 = scalar2 / lProd2;
-        float lss2 = cos2 * (pow(fX, 2) + pow(fY, 2));
+        float lPF2 = cos2 * (pow(fX, 2) + pow(fY, 2));
         float lC2 = pow(cX, 2) + pow(cY, 2);
-        float ssX = std::sqrt(lss2 / lC2 * pow(cX, 2));
-        float ssY = std::sqrt(lss2 / lC2 * pow(cY, 2));
+        float pFX = std::sqrt(lPF2 / lC2 * pow(cX, 2));
+        float pFY = std::sqrt(lPF2 / lC2 * pow(cY, 2));
 
-        printf("ss--%f--%f\n", ssX, ssY);
+        std::cout << "111" << std::endl;
+        if (p->getIsShooting())
+        {
+          std::cout << "222" << std::endl;
+          if (p->getTurnLeft())
+            soccerBall->touch(100000, -100000);
+          else
+            soccerBall->touch(100000, -100000);
+          p->setIsShooting(false);
+        }
+        else
+        {
+          std::cout << "333" << std::endl;
+          soccerBall->touch(pFX, pFY);
+        }
 
         p->setVelocity(0, 0);
-        Vector2D sumBF = soccerBall->getSumOfForces();
-        float fYFix = (soccerBall->getPosition().getY() == cPoint.getY()) ? 0 : sumBF.getY();
-        printf("%f--%f\n", ssX - sumBF.getX(), ssY - fYFix);
-        soccerBall->touch(ssX - sumBF.getX(), ssY - fYFix);
 
         float dSepX = 0;
         float dSepY = 0;
@@ -228,7 +229,7 @@ int main(int argc, char *argv[])
         if (cX > 0 && cY == 0)
         {
           dSepX = -10;
-          dSepY = -10;
+          // dSepY = -10;
         }
         if (cX < 0 && cY < 0)
         {
@@ -238,7 +239,7 @@ int main(int argc, char *argv[])
         if (cX < 0 && cY > 0)
         {
           dSepX = 10;
-          dSepY = -10;
+          // dSepY = -10;
         }
         if (cX < 0 && cY == 0)
         {
