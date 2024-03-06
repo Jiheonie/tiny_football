@@ -1,7 +1,9 @@
 #include "Goal.h"
 #include "media.h"
 
-Goal::Goal(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface)
+std::vector<Goal *> Goal::_allGoals = {};
+
+Goal::Goal(TeamEnum t, float x, float y, float ax, float ay, float bx, float by, SDL_Renderer *renderer, SDL_Surface *screenSurface)
 {
   team = t;
   image = loadTexture("assets/goal.png", renderer, screenSurface);
@@ -9,9 +11,24 @@ Goal::Goal(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface *sc
   rect.y = y;
   rect.w = 128;
   rect.h = 256;
+  a = Vector2D(ax, ay);
+  b = Vector2D(bx, by);
 }
 
-void Goal::draw(SDL_Renderer *renderer) {
+void Goal::draw(SDL_Renderer *renderer)
+{
   SDL_RendererFlip flip = (team == Blue) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
   SDL_RenderCopyEx(renderer, image, NULL, &rect, 0, NULL, flip);
+}
+
+TeamEnum Goal::getTeam() {
+  return team;
+}
+
+Vector2D Goal::getA() {
+  return a;
+}
+
+Vector2D Goal::getB() {
+  return b;
 }

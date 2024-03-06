@@ -47,7 +47,7 @@ void PhysicsObject::resetForces()
     forces.pop_back();
   }
   acceleration = Vector2D();
-  velocity.setX(velocity.getX() * 0.9999);
+  velocity.setX(velocity.getX() * 0.999);
 }
 
 Vector2D PhysicsObject::getPosition()

@@ -1,6 +1,7 @@
-#include <iostream>
-
 #pragma once
+#include <iostream>
+// #include "Line.h"
+
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 

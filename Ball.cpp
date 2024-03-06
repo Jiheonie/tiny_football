@@ -1,5 +1,6 @@
-#include "Ball.h"
 #include <SDL2/SDL.h>
+#include <cmath>
+#include "Ball.h"
 #include "utils.h"
 #include "media.h"
 
@@ -29,9 +30,23 @@ void Ball::draw(SDL_Renderer *renderer)
 void Ball::touch(float x, float y)
 {
   if (x * velocity.getX() <= 0)
+  {
+    printf("-1\n");
     velocity.setX(-1 * velocity.getX());
+  }
   if (y * velocity.getY() <= 0)
     velocity.setY(-1 * velocity.getY());
 
   forces.push_back(Vector2D(x, y));
+}
+
+void Ball::update(float dt)
+{
+  collideBallAndWall(this);
+  PhysicsObject::update(dt);
+}
+
+bool Ball::isTouching(Vector2D p)
+{
+  return pow(p.getX() - position.getX(), 2) + pow(p.getY() - position.getY(), 2) - pow(rad, 2) <= 0;
 }

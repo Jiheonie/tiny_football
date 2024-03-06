@@ -21,6 +21,8 @@ public:
   float getRadius();
   void draw(SDL_Renderer *renderer);
   void touch(float x, float y);
+  void update(float dt);
+  bool isTouching(Vector2D p);
 };
 
 #endif

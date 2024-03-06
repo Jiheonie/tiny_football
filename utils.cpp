@@ -55,7 +55,6 @@ Vector2D collidePlayerAndPlayer(Player *p1, Player *p2)
 
   if (d2 <= rSum2)
   {
-    // printf("Collide\n");
     float cX = (p1Pos.getX() - p2Pos.getX()) / 2 + p2Pos.getX();
     float cY = (p1Pos.getY() - p2Pos.getY()) / 2 + p2Pos.getY();
     return Vector2D(cX, cY);
@@ -97,9 +96,9 @@ void collideBallAndWall(Ball *b)
     b->setPosition(b->getPosition().getX(), 50);
     collideY = true;
   }
-  if (b->getPosition().getY() + 50 >= 720)
+  if (b->getPosition().getY() >= groundY)
   {
-    b->setPosition(b->getPosition().getX(), 670);
+    b->setPosition(b->getPosition().getX(), groundY);
     collideY = true;
   }
   if (collideX)
@@ -109,6 +108,38 @@ void collideBallAndWall(Ball *b)
   if (collideY)
   {
     b->setVelocity(b->getVelocity().getX(), -1 * b->getVelocity().getY());
+  }
+}
+
+Line makeLineNormal(Vector2D p, Vector2D n)
+{
+  float c = -1 * (n.getX() * p.getX() + n.getY() * p.getY());
+  return Line(n.getX(), n.getY(), c);
+}
+
+Line makeLinePoint(Vector2D p1, Vector2D p2)
+{
+  Vector2D normal = Vector2D(-1 * (p1.getY() - p2.getY()), p1.getX() - p2.getX());
+  float c = -1 * (normal.getX() * p1.getX() + normal.getY() * p1.getY());
+  return Line(normal.getX(), normal.getY(), c);
+}
+
+void collideBallAndGoal(Ball *b)
+{
+  for (int i = 0; i < 2; i++)
+  {
+    Goal *g = Goal::_allGoals[i];
+    Line l = makeLinePoint(g->getA(), g->getB());
+    Vector2D slideshow = l.getSlideshow(b->getPosition());
+    float d = pow(b->getPosition().getX() - slideshow.getX(), 2) + pow(b->getPosition().getY() - slideshow.getY(), 2);
+    if (b->isTouching(g->getA()))
+    {
+      b->setVelocity(-1 * b->getVelocity().getX(), -1 * b->getVelocity().getY());
+    }
+    else if (b->isTouching(slideshow) && slideshow.getY() < g->getA().getY() && slideshow.getY() > g->getA().getY())
+    {
+      b->setVelocity(0, 0);
+    }
   }
 }
 

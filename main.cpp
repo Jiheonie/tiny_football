@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
 
   Ball *soccerBall = new Ball(renderer, screenSurface);
 
-  Goal *blueGoal = new Goal(Blue, 0, 720 - 256, renderer, screenSurface);
-  Goal *redGoal = new Goal(Red, 1280 - 128, 720 - 256, renderer, screenSurface);
+  Goal *blueGoal = new Goal(Blue, 0, 720 - 256, 128, 465, 0, 500, renderer, screenSurface);
+  Goal *redGoal = new Goal(Red, 1280 - 128, 720 - 256, 128, 465, 0, 500, renderer, screenSurface);
 
   // Main Loop Flag
   bool quit = false;
@@ -172,6 +172,10 @@ int main(int argc, char *argv[])
     blueGoal->draw(renderer);
     redGoal->draw(renderer);
 
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderDrawLine(renderer, 1152, 465, 1280, 500);
+    SDL_RenderDrawLine(renderer, 128, 465, 0, 500);
+
     // Update screen
     SDL_RenderPresent(renderer);
 
@@ -196,19 +200,16 @@ int main(int argc, char *argv[])
         float pFX = std::sqrt(lPF2 / lC2 * pow(cX, 2));
         float pFY = std::sqrt(lPF2 / lC2 * pow(cY, 2));
 
-        std::cout << "111" << std::endl;
         if (p->getIsShooting())
         {
-          std::cout << "222" << std::endl;
           if (p->getTurnLeft())
-            soccerBall->touch(100000, -100000);
+            soccerBall->touch(-300000, -100000);
           else
-            soccerBall->touch(100000, -100000);
+            soccerBall->touch(300000, -100000);
           p->setIsShooting(false);
         }
         else
         {
-          std::cout << "333" << std::endl;
           soccerBall->touch(pFX, pFY);
         }
 
@@ -239,12 +240,12 @@ int main(int argc, char *argv[])
         if (cX < 0 && cY > 0)
         {
           dSepX = 10;
-          // dSepY = -10;
+          dSepY = -10;
         }
         if (cX < 0 && cY == 0)
         {
           dSepX = 10;
-          dSepY = -10;
+          // dSepY = -10;
         }
         if (cX == 0 && cY > 0)
         {

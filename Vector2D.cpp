@@ -17,11 +17,13 @@ float Vector2D::getY()
   return y;
 }
 
-void Vector2D::setX(float newX) {
+void Vector2D::setX(float newX)
+{
   x = newX;
 }
 
-void Vector2D::setY(float newY) {
+void Vector2D::setY(float newY)
+{
   y = newY;
 }
 
