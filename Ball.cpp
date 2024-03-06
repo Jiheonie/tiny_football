@@ -29,6 +29,7 @@ void Ball::draw(SDL_Renderer *renderer)
 
 void Ball::touch(float x, float y)
 {
+  printf("%f---%f\n", x, velocity.getX());
   if (x * velocity.getX() <= 0)
   {
     printf("-1\n");

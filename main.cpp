@@ -200,12 +200,15 @@ int main(int argc, char *argv[])
         float pFX = std::sqrt(lPF2 / lC2 * pow(cX, 2));
         float pFY = std::sqrt(lPF2 / lC2 * pow(cY, 2));
 
+        pFX = (fX >= 0) ? pFX : -pFX;
+        pFY = (fY >= 0) ? pFY : -pFY;
+
         if (p->getIsShooting())
         {
           if (p->getTurnLeft())
-            soccerBall->touch(-300000, -100000);
+            soccerBall->touch(-100000, -100000);
           else
-            soccerBall->touch(300000, -100000);
+            soccerBall->touch(100000, -100000);
           p->setIsShooting(false);
         }
         else
