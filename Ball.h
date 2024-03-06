@@ -23,6 +23,7 @@ public:
   void touch(float x, float y);
   void update(float dt);
   bool isTouching(Vector2D p);
+  void reset();
 };
 
 #endif

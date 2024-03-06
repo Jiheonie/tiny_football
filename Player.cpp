@@ -5,6 +5,17 @@
 
 std::vector<Player *> Player::_allPlayers = {};
 
+void Player::reset()
+{
+  for (int i = 0; i < 4; i++)
+  {
+    Player *p = Player::_allPlayers[i];
+    p->position = p->rootPos;
+    p->velocity = Vector2D();
+    p->acceleration = Vector2D();
+  }
+}
+
 Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface)
     : PhysicsObject(x, y, 50)
 {
@@ -16,6 +27,7 @@ Player::Player(TeamEnum t, float x, float y, SDL_Renderer *renderer, SDL_Surface
   isMoving = false;
   isJumping = false;
   isShooting = false;
+  rootPos = Vector2D(x, y);
 
   _allPlayers.push_back(this);
 };
@@ -83,7 +95,6 @@ void Player::move(char m)
     {
       forces.insert(forces.begin(), Vector2D(0, -300000));
       isJumping = true;
-      printf("Vel: %f,%f\n", velocity.getX(), velocity.getY());
     }
     break;
   case 'd':
@@ -91,8 +102,6 @@ void Player::move(char m)
     {
       forces.erase(forces.begin());
       isJumping = false;
-      printf("%f\n", velocity.getY());
-      printf("d\n");
     }
 
   default:

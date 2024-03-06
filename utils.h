@@ -27,6 +27,8 @@ Line makeLinePoint(Vector2D p1, Vector2D p2);
 
 void collideBallAndGoal(Ball *b);
 
+bool isInGoal(Goal *g, Ball *b);
+
 bool isRootVector(Vector2D v);
 
 #endif

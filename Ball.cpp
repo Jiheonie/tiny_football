@@ -32,7 +32,6 @@ void Ball::touch(float x, float y)
   printf("%f---%f\n", x, velocity.getX());
   if (x * velocity.getX() <= 0)
   {
-    printf("-1\n");
     velocity.setX(-1 * velocity.getX());
   }
   if (y * velocity.getY() <= 0)
@@ -43,11 +42,19 @@ void Ball::touch(float x, float y)
 
 void Ball::update(float dt)
 {
+
   collideBallAndWall(this);
+  collideBallAndGoal(this);
   PhysicsObject::update(dt);
 }
 
 bool Ball::isTouching(Vector2D p)
 {
   return pow(p.getX() - position.getX(), 2) + pow(p.getY() - position.getY(), 2) - pow(rad, 2) <= 0;
+}
+
+void Ball::reset() {
+  position = Vector2D(640, 300);
+  velocity = Vector2D(0, 0);
+  acceleration = Vector2D(0, 0);
 }

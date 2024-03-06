@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <vector>
 #include <cmath>
 
@@ -11,6 +12,7 @@
 #include "Vector2D.h"
 #include "PhysicsObject.h"
 #include "Goal.h"
+#include "Scoreboard.h"
 #include "utils.h"
 
 #define FPS 60.0
@@ -44,6 +46,16 @@ int main(int argc, char *argv[])
     std::cout << "Failed to initialize SDL_image for PNG file: " << SDL_GetError() << std::endl;
   }
 
+  if (TTF_Init() == -1)
+  {
+    std::cout << "Could not init SDL2_ttf, error: " << TTF_GetError() << std::endl;
+    return EXIT_FAILURE;
+  }
+  else
+  {
+    std::cout << "SDL2_ttf system ready to go" << std::endl;
+  }
+
   Team *blueTeam = new Team(Blue);
   blueTeam->addPlayer(new Player(Blue, 100, groundY, renderer, screenSurface));
   blueTeam->addPlayer(new Player(Blue, 300, groundY, renderer, screenSurface));
@@ -59,6 +71,8 @@ int main(int argc, char *argv[])
   Goal *blueGoal = new Goal(Blue, 0, 720 - 256, 128, 465, 0, 500, renderer, screenSurface);
   Goal *redGoal = new Goal(Red, 1280 - 128, 720 - 256, 128, 465, 0, 500, renderer, screenSurface);
 
+  Scoreboard *board = new Scoreboard();
+
   // Main Loop Flag
   bool quit = false;
 
@@ -70,8 +84,14 @@ int main(int argc, char *argv[])
   // while application is running
   while (!quit)
   {
+    if (board->getIsGoal())
+    {
+      Player::reset();
+      soccerBall->reset();
+      board->setIsGoal(false);
+    }
+
     float newTime = ((float)SDL_GetTicks()) * 1000 / ((float)FPS) / 1000;
-    // printf("%f--%f\n", newTime, lastTime);
     float dt = newTime - lastTime;
 
     if (dt > 1.0 / FPS)
@@ -171,6 +191,8 @@ int main(int argc, char *argv[])
 
     blueGoal->draw(renderer);
     redGoal->draw(renderer);
+
+    board->draw(renderer);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderDrawLine(renderer, 1152, 465, 1280, 500);
@@ -298,10 +320,24 @@ int main(int argc, char *argv[])
         }
       }
     }
+
+    for (int i = 0; i < 2; i++)
+    {
+      Goal *g = Goal::_allGoals[i];
+      if (isInGoal(g, soccerBall))
+      {
+        if (g->getTeam() == Blue)
+          board->upScore('r');
+        else
+          board->upScore('b');
+        board->setIsGoal(true);
+      }
+    }
   }
 
-  // Free resourcs and close SDL
+  // Free resources and close SDL
   destroyMedia();
+  board->destroy();
   close();
 
   return EXIT_SUCCESS;

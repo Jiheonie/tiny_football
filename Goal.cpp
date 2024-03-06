@@ -13,6 +13,8 @@ Goal::Goal(TeamEnum t, float x, float y, float ax, float ay, float bx, float by,
   rect.h = 256;
   a = Vector2D(ax, ay);
   b = Vector2D(bx, by);
+
+  _allGoals.push_back(this);
 }
 
 void Goal::draw(SDL_Renderer *renderer)

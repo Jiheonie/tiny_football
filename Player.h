@@ -24,9 +24,11 @@ private:
   bool isMoving;
   bool isJumping;
   bool isShooting;
+  Vector2D rootPos;
 
 public:
   static std::vector<Player *> _allPlayers;
+  static void reset();
   Player(TeamEnum team, float x, float y, SDL_Renderer *renderer, SDL_Surface *screenSurface);
   float getRadius();
   bool getIsJumpint();

@@ -35,7 +35,6 @@ Vector2D collidePlayerAndBall(Player *p, Ball *b)
 
   if (d2 <= rSum2)
   {
-    printf("Collide\n");
     float cX = (pPos.getX() - bPos.getX()) / 2 + bPos.getX();
     float cY = (pPos.getY() - bPos.getY()) / 2 + bPos.getY();
     return Vector2D(cX, cY);
@@ -141,6 +140,23 @@ void collideBallAndGoal(Ball *b)
       b->setVelocity(0, 0);
     }
   }
+}
+
+bool isInGoal(Goal *g, Ball *b)
+{
+  if (b->getPosition().getY() - 50 > 464)
+  {
+    if (g->getTeam() == Blue)
+    {
+      if (b->getPosition().getX() + 50 <= 128)
+        return true;
+      return false;
+    }
+    if (b->getPosition().getX() - 50 >= 1152)
+      return true;
+    return false;
+  }
+  return false;
 }
 
 bool isRootVector(Vector2D v)
